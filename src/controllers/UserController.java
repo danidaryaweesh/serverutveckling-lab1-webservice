@@ -17,6 +17,12 @@ import java.util.List;
 /**
  * Created by dani on 2016-11-23.
  */
+
+// GSON parsing: Parsa objekt i nivå 2 och lägg till den med (ta bort den från orginalet genom toString --> antar att den utgår från toString!
+
+// ex: A skickar till b . A skickar JsonCreator och B fångar som vanligt och när den vill skicka något så parsar den genom
+    // json creator och skickar som vanligt i en vanlig string som består av båda och mottagaren fångar som vanligt!
+
 @Path("/user")
 public class UserController {
 
@@ -62,6 +68,7 @@ public class UserController {
         UserDao userDao=null;
         if(user != null){
             // user exist
+            System.out.println("Users log list length: "+user.getLog().size());
             Gson gson = new Gson();
             userDao = convertToUserDao(user);
             String userDaoJson = gson.toJson(userDao);
