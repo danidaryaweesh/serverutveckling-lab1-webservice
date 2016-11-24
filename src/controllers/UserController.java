@@ -27,10 +27,14 @@ public class UserController {
     @GET
     @Produces("text/plain")
     public String login(@QueryParam("userDaoJson") String userDaoJson){
+        if(userService == null){
+            userService = new UserServiceImpl();
+        }
         Gson gson = new Gson();
         System.out.println("Got the right one!");
-
+        System.out.println("userDaoJson is:*** "+userDaoJson);
         UserAuthentication userDao = gson.fromJson(userDaoJson, UserAuthentication.class);
+        System.out.println("UserDao is: "+userDao);
         User user = userService.findUserByUsername(userDao.getUsername());
         if(user != null){
 
