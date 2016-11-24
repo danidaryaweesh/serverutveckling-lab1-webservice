@@ -1,6 +1,8 @@
 package controllers;
+
 import Dao.LogDao;
 import Dao.MessageDao;
+import Dao.UserAuthentication;
 import Dao.UserDao;
 import com.google.gson.Gson;
 import model.Log;
@@ -8,6 +10,7 @@ import model.Message;
 import model.User;
 import service.UserService;
 import service.serviceImpl.UserServiceImpl;
+
 import javax.ws.rs.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +30,19 @@ public class UserController {
         Gson gson = new Gson();
         System.out.println("Got the right one!");
 
-        UserDao userDao = gson.fromJson(userDaoJson, UserDao.class);
+        UserAuthentication userDao = gson.fromJson(userDaoJson, UserAuthentication.class);
         User user = userService.findUserByUsername(userDao.getUsername());
-        if (user == null) {
-            UserDao userDaoToReturn = convertToUserDao(user);
-            String userDaoJsonToReturn = gson.toJson(userDaoToReturn);
-            return userDaoJsonToReturn;
-        } else {
+        if(user != null){
+
+            User checkLoginUser = userService.login(user);
+            if(checkLoginUser!= null){
+                UserDao userDaoToReturn = convertToUserDao(user);
+                String userDaoJsonToReturn = gson.toJson(userDaoToReturn);
+                return userDaoJsonToReturn;
+            }else {
+                return "Empty";
+            }
+        }else {
             return "Empty";
         }
     }
