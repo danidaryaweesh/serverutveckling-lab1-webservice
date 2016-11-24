@@ -23,7 +23,7 @@ public class LogController {
 
     // måste ändras till post senare!
     @Path("/add")
-    @GET
+    @POST
     @Produces("text/plain")
     public String addLog(@QueryParam(value = "logDao") String logDao){
         if(logService == null){
