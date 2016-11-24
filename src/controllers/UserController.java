@@ -23,16 +23,17 @@ public class UserController {
     @Path("/login")
     @GET
     @Produces("text/plain")
-    public String login(String userDaoJson){
+    public String login(@QueryParam("userDaoJson") String userDaoJson){
         Gson gson = new Gson();
+        System.out.println("Got the right one!");
 
         UserDao userDao = gson.fromJson(userDaoJson, UserDao.class);
         User user = userService.findUserByUsername(userDao.getUsername());
-        if(user ==null){
+        if (user == null) {
             UserDao userDaoToReturn = convertToUserDao(user);
             String userDaoJsonToReturn = gson.toJson(userDaoToReturn);
             return userDaoJsonToReturn;
-        }else{
+        } else {
             return "Empty";
         }
     }
@@ -59,21 +60,40 @@ public class UserController {
         }
     }
 
+    @Path(value = "/username/{username}")
+    @GET
+    @Produces("text/plain")
+    public String getUserWithUsername(@PathParam(value = "username") String username){
+        if(userService == null)
+            userService = new UserServiceImpl();
+        User user = userService.findUserByUsername(username);
+        UserDao userDao=null;
+        if(user != null){
+            Gson gson = new Gson();
+            userDao = convertToUserDao(user);
+            String userDaoJson = gson.toJson(userDao);
+
+            return userDaoJson;
+        }else{
+            return "empty";
+        }
+    }
+
     @POST
     @Produces("text/plain")
-    public String addUser(String userDaoJson){
+    public String addUser(@QueryParam("userDaoJson") String userDaoJson){
         Gson gson = new Gson();
         UserDao userDao = gson.fromJson(userDaoJson, UserDao.class);
         User user = userService.findUserByUsername(userDao.getUsername());
 
-        if(user != null){
+        if(user == null){
             user = userService.register(user);
             UserDao userDaoToReturn = convertToUserDao(user);
             String userDaoJsonToReturn = gson.toJson(userDao);
 
             return userDaoJsonToReturn;
         }else{
-            System.out.println("User dosent exist!");
+            System.out.println("User exist!");
             return "Empty";
         }
     }

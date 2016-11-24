@@ -1,4 +1,5 @@
 import controllers.HelloWorld;
+import controllers.LogController;
 import controllers.UserController;
 
 import javax.ws.rs.ApplicationPath;
@@ -18,6 +19,7 @@ public class MyApplication extends Application{
         HashSet h = new HashSet<Class<?>>();
         h.add(HelloWorld.class );
         h.add(UserController.class);
+        h.add(LogController.class);
         return h;
     }
 }
