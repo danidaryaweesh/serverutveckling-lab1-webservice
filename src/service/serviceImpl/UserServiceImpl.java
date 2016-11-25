@@ -23,11 +23,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(User user){
-        User returnedUser = new User();
         List<User> userList = checkLogin(user);
 
         if(!userList.isEmpty() && userList.size() < 2){
-            returnedUser = userList.get(0);
+            User returnedUser = userList.get(0);
             System.out.println("The username is: "+returnedUser.getUsername());
             return returnedUser;
         }//if
@@ -76,9 +75,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         List<User> users = getUser(username);
+        System.out.println("Length of list in find: "+users.size());
         if(users.size() > 0){
             return users.get(0);
         }else{
+            System.out.println("Gonna return null in find!");
             return null;
         }
     }

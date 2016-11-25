@@ -99,23 +99,33 @@ public class UserController {
     }
 
     @POST
+    @Consumes("text/plain")
     @Produces("text/plain")
-    public String addUser(@QueryParam("userDaoJson") String userDaoJson){
+    public String addUser(String userDaoJson){
         if(userService == null){
             userService = new UserServiceImpl();
             System.out.println("Created new userservice in adduser");
         }
-
+        System.out.println("UserdaoJson in adduser: "+userDaoJson);
         Gson gson = new Gson();
-        UserDao userDao = gson.fromJson(userDaoJson, UserDao.class);
-        User user = userService.findUserByUsername(userDao.getUsername());
+        UserAuthentication userAuthentication = gson.fromJson(userDaoJson, UserAuthentication.class);
+
+        System.out.println("After GSON converstion: "+userAuthentication.getUsername());
+        User user = userService.findUserByUsername(userAuthentication.getUsername());
 
         if(user == null){
-            user = userService.register(user);
-            UserDao userDaoToReturn = convertToUserDao(user);
-            String userDaoJsonToReturn = gson.toJson(userDao);
+            User userTosave = new User();
+            userTosave.setUsername(userAuthentication.getUsername());
+            userTosave.setPassword(userAuthentication.getPassword());
+            userTosave.setAddress(userAuthentication.getAddress());
+            userTosave.setAge(userAuthentication.getAge());
+            userTosave.setWorkTitle(userAuthentication.getWorkTitle());
 
-            return userDaoJsonToReturn;
+            user = userService.register(userTosave);
+
+            System.out.println("Registerd in controller user: "+user.getUsername());
+
+            return userDaoJson;
         }else{
             System.out.println("User exist!");
             return "Empty";
@@ -132,7 +142,7 @@ public class UserController {
         userDao.setAddress(user.getAddress());
         userDao.setAge(user.getAge());
         userDao.setLog(getLogDaos(user.getLog()));
-        System.out.println("Log in userDao: "+userDao.getLog().get(0).getTitle());
+        // System.out.println("Log in userDao: "+userDao.getLog().get(0).getTitle());
         userDao.setRecieverMessage(getMessageDaos(user.getRecieverMessage()));
         userDao.setSenderMessage(getMessageDaos(user.getSenderMessage()));
 
