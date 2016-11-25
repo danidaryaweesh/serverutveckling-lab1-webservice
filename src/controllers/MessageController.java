@@ -37,7 +37,7 @@ public class MessageController {
         Gson gson = new Gson();
         MessageDao messageToSave = gson.fromJson(messageDao, MessageDao.class);
         User userSender = userService.findUser(messageToSave.getSender().getId());
-        User userReciever = userService.findUserByUsername(messageToSave.getReciever().getUsername());
+        User userReciever = userService.findUserByUsername(messageToSave.getReciever());
 
         if(userSender != null && userReciever != null){
             Message realMessage = new Message();

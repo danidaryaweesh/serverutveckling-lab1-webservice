@@ -8,7 +8,7 @@ import java.util.Calendar;
 public class MessageDao {
     private int id;
     private UserDao sender;
-    private UserDao reciever;
+    private String reciever;
     private String content;
     private Calendar date;
 
@@ -28,11 +28,11 @@ public class MessageDao {
         this.sender = sender;
     }
 
-    public UserDao getReciever() {
+    public String getReciever() {
         return reciever;
     }
 
-    public void setReciever(UserDao reciever) {
+    public void setReciever(String reciever) {
         this.reciever = reciever;
     }
 
