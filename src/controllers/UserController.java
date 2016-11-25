@@ -128,6 +128,7 @@ public class UserController {
         userDao.setAddress(user.getAddress());
         userDao.setAge(user.getAge());
         userDao.setLog(getLogDaos(user.getLog()));
+        System.out.println("Log in userDao: "+userDao.getLog().get(0).getTitle());
         userDao.setRecieverMessage(getMessageDaos(user.getRecieverMessage()));
         userDao.setSenderMessage(getMessageDaos(user.getSenderMessage()));
 
@@ -149,13 +150,13 @@ public class UserController {
     private List<LogDao> getLogDaos(List<Log> logs){
         List<LogDao> daoLogs = new ArrayList<LogDao>();
 
-        for(int i=0;i<daoLogs.size();i++){
+        for(int i=0;i<logs.size();i++){
             LogDao dao = new LogDao();
 
-            dao.setId(daoLogs.get(i).getId());
-            dao.setContent(daoLogs.get(i).getContent());
-           // dao.setDate(daoLogs.get(i).getDate());
-            dao.setTitle(daoLogs.get(i).getTitle());
+            dao.setId(logs.get(i).getId());
+            dao.setContent(logs.get(i).getContent());
+           // dao.setDate(logs.get(i).getDate());
+            dao.setTitle(logs.get(i).getTitle());
             daoLogs.add(dao);
         }
         return daoLogs;
