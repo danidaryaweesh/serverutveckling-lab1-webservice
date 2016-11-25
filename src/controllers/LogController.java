@@ -24,6 +24,7 @@ public class LogController {
 
     @Path("/add")
     @POST
+    @Consumes("text/plain")
     @Produces("text/plain")
     public String addLog(@QueryParam(value = "logDao") String logDao){
         if(logService == null){
@@ -42,7 +43,7 @@ public class LogController {
 
             realLog.setTitle(logToSave.getTitle());
             realLog.setContent(logToSave.getContent());
-            realLog.setDate(logToSave.getDate());
+            realLog.setDate(logToSave.getDate() != null? logToSave.getDate() : null);
             realLog.setOwner(user);
             logService.addLog(realLog);
 

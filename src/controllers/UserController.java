@@ -142,7 +142,6 @@ public class UserController {
         userDao.setAddress(user.getAddress());
         userDao.setAge(user.getAge());
         userDao.setLog(getLogDaos(user.getLog()));
-        // System.out.println("Log in userDao: "+userDao.getLog().get(0).getTitle());
         userDao.setRecieverMessage(getMessageDaos(user.getRecieverMessage()));
         userDao.setSenderMessage(getMessageDaos(user.getSenderMessage()));
 
@@ -155,9 +154,9 @@ public class UserController {
         for(int i=0;i<messages.size();i++){
             MessageDao dao = new MessageDao();
             dao.setId(messages.get(i).getId());
-           // dao.setDate(messages.get(i).getDate());
+            dao.setDate(messages.get(i).getDate() !=null ? messages.get(i).getDate() : null);
         }
-
+        // user saknas
         return listToReturn;
     }
 
@@ -169,7 +168,7 @@ public class UserController {
 
             dao.setId(logs.get(i).getId());
             dao.setContent(logs.get(i).getContent());
-           // dao.setDate(logs.get(i).getDate());
+            dao.setDate(logs.get(i).getDate() != null? logs.get(i).getDate() : null);
             dao.setTitle(logs.get(i).getTitle());
             daoLogs.add(dao);
         }
