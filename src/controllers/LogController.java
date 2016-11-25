@@ -22,23 +22,26 @@ public class LogController {
     private LogService logService;
     private UserService userService;
 
-    @Path("/add")
     @POST
     @Consumes("text/plain")
     @Produces("text/plain")
-    public String addLog(@QueryParam(value = "logDao") String logDao){
+    public String addLog(String logDao){
         if(logService == null){
             logService = new LogServiceImpl();
         }
         if(userService == null){
             userService = new UserServiceImpl();
         }
-        System.out.println("Adding a log!");
+        System.out.println("Adding a log! which is: "+logDao);
         Gson gson = new Gson();
         LogDao logToSave = gson.fromJson(logDao, LogDao.class);
+        System.out.println("After Gson conversion: "+logToSave.getTitle());
+
         User user = userService.findUser(logToSave.getOwner().getId());
+        System.out.println("After user find:" +user.getUsername());
 
         if(user!=null){
+            System.out.println("found user: in if");
             Log realLog = new Log();
 
             realLog.setTitle(logToSave.getTitle());
