@@ -1,6 +1,7 @@
 package controllers;
 
 import Dao.LogDao;
+import Dao.UserDao;
 import com.google.gson.Gson;
 import model.Log;
 import model.User;
@@ -21,7 +22,6 @@ public class LogController {
     private LogService logService;
     private UserService userService;
 
-    // måste ändras till post senare!
     @Path("/add")
     @POST
     @Produces("text/plain")
@@ -48,7 +48,7 @@ public class LogController {
 
             return logDao;
         }else{
-            return "empty";
+            return "Empty";
         }
     }
 
@@ -59,8 +59,9 @@ public class LogController {
         if(logService == null){
             logService = new LogServiceImpl();
         }
-        if (userService == null)
+        if (userService == null) {
             userService = new UserServiceImpl();
+        }
 
         System.out.println("THROUGH ID: "+userid);
 
@@ -71,14 +72,28 @@ public class LogController {
             Log log = user.getLog().get(0);
             LogDao l = new LogDao();
 
+            l.setId(log.getId());
             l.setTitle(log.getTitle());
             l.setContent(log.getContent());
+            l.setDate(log.getDate());
+            l.setOwner(convertUserToUserDao(log.getOwner()));
 
             String la = gson.toJson(l);
             return la;
 
         } else {
-            return "empty";
+            return "Empty";
         }
+    }
+
+    private UserDao convertUserToUserDao(User user){
+        UserDao userDao = new UserDao();
+        userDao.setId(user.getId());
+        userDao.setAge(user.getAge());
+        userDao.setUsername(user.getUsername());
+        userDao.setWorkTitle(user.getWorkTitle());
+        userDao.setAddress(user.getAddress());
+
+        return userDao;
     }
 }

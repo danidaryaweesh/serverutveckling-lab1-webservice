@@ -9,6 +9,8 @@ import java.util.List;
 /**
  * Created by Alican on 2016-11-21.
  */
+
+
 public class UserServiceImpl implements UserService {
 
     private EntityManagerFactory emf;
@@ -81,30 +83,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    /*private void test(){
-     // EntityManagerFactory emf = Persistence.createEntityManagerFactory("TestPU");
-       // EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = null;
-
-        try {
-            if(checkUserExsistence(new User()).size() < 1) {
-                tx = em.getTransaction();
-                tx.begin();
-                em.persist(new User());
-                tx.commit();
-            }else{
-                System.out.println("User already exist!");
-            }
-        }catch(RuntimeException e){
-            if ( tx != null && tx.isActive() )
-                tx.rollback();
-            throw e;
-        }finally {
-            System.out.println("Registred new user!");
-            em.close();
-        }
-    }*/
-
     private User checkUserExsistence(User user){
         User realUser = em.find(User.class, user.getId());
         return realUser;
@@ -129,4 +107,3 @@ public class UserServiceImpl implements UserService {
         return userList;
     }
 }//class
-

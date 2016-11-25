@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import model.Log;
 import model.Message;
 import model.User;
-import service.UserService;
 import service.serviceImpl.UserServiceImpl;
 
 import javax.ws.rs.*;
@@ -18,16 +17,10 @@ import java.util.List;
  * Created by dani on 2016-11-23.
  */
 
-// GSON parsing: Parsa objekt i nivå 2 och lägg till den med (ta bort den från orginalet genom toString --> antar att den utgår från toString!
-
-// ex: A skickar till b . A skickar JsonCreator och B fångar som vanligt och när den vill skicka något så parsar den genom
-    // json creator och skickar som vanligt i en vanlig string som består av båda och mottagaren fångar som vanligt!
-
 @Path("/user")
 public class UserController {
 
-    private UserService userService;
-
+    private UserServiceImpl userService;
 
     @Path("/login")
     @GET
@@ -35,6 +28,7 @@ public class UserController {
     public String login(@QueryParam("userDaoJson") String userDaoJson){
         if(userService == null){
             userService = new UserServiceImpl();
+            System.out.println("Created new userservice in login");
         }
         Gson gson = new Gson();
         System.out.println("Got the right one!");
@@ -61,11 +55,13 @@ public class UserController {
     @GET
     @Produces("text/plain")
     public String showUserInfo(@PathParam(value = "userid") int userid){
-       if(userService == null)
-            userService = new UserServiceImpl();
+       if(userService == null) {
+           userService = new UserServiceImpl();
+           System.out.println("Created new userservice in showUserInfo");
+       }
 
         User user = userService.findUser(userid);
-        UserDao userDao=null;
+        UserDao userDao= null;
         if(user != null){
             // user exist
             System.out.println("Users log list length: "+user.getLog().size());
@@ -76,7 +72,7 @@ public class UserController {
             return userDaoJson;
 
         }else{
-            return "empty";
+            return "Empty";
         }
     }
 
@@ -84,8 +80,11 @@ public class UserController {
     @GET
     @Produces("text/plain")
     public String getUserWithUsername(@PathParam(value = "username") String username){
-        if(userService == null)
+        if(userService == null) {
             userService = new UserServiceImpl();
+            System.out.println("Created new userservice in getUserWithUsername");
+        }
+
         User user = userService.findUserByUsername(username);
         UserDao userDao=null;
         if(user != null){
@@ -95,13 +94,18 @@ public class UserController {
 
             return userDaoJson;
         }else{
-            return "empty";
+            return "Empty";
         }
     }
 
     @POST
     @Produces("text/plain")
     public String addUser(@QueryParam("userDaoJson") String userDaoJson){
+        if(userService == null){
+            userService = new UserServiceImpl();
+            System.out.println("Created new userservice in adduser");
+        }
+
         Gson gson = new Gson();
         UserDao userDao = gson.fromJson(userDaoJson, UserDao.class);
         User user = userService.findUserByUsername(userDao.getUsername());
