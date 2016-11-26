@@ -1,5 +1,6 @@
 import controllers.HelloWorld;
 import controllers.LogController;
+import controllers.MessageController;
 import controllers.UserController;
 
 import javax.ws.rs.ApplicationPath;
@@ -20,6 +21,7 @@ public class MyApplication extends Application{
         h.add(HelloWorld.class );
         h.add(UserController.class);
         h.add(LogController.class);
+        h.add(MessageController.class);
         return h;
     }
 }

@@ -21,25 +21,30 @@ public class MessageController {
     private UserService userService;
     private MessageService messageService;
 
-    @Path("/add")
     @POST
     @Consumes("text/plain")
     @Produces("text/plain")
-    public String getMessage(@QueryParam(value = "messageDao") String messageDao){
+    public String getMessage(String messageDao){
+        System.out.println("before ifs..");
         if(userService == null){
             userService = new UserServiceImpl();
         }
         if(messageService == null){
             messageService = new MessageServiceImpl();
         }
-
-        System.out.println("Adding a message!");
+        System.out.println("Adding a message after ifs..");
         Gson gson = new Gson();
         MessageDao messageToSave = gson.fromJson(messageDao, MessageDao.class);
+
+        System.out.println("content of Message recieved: "+messageToSave.getContent());
+
         User userSender = userService.findUser(messageToSave.getSender().getId());
         User userReciever = userService.findUserByUsername(messageToSave.getReciever());
 
+        System.out.println("Sender and reciever: "+userSender.getUsername() + " , "+userReciever.getUsername());
+
         if(userSender != null && userReciever != null){
+            System.out.println("In if not null for both sender and receiever!");
             Message realMessage = new Message();
             realMessage.setDate(messageToSave.getDate() !=null ? messageToSave.getDate() : null);
             realMessage.setContent(messageToSave.getContent());

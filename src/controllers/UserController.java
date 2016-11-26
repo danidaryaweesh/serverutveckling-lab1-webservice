@@ -142,6 +142,8 @@ public class UserController {
         userDao.setAddress(user.getAddress());
         userDao.setAge(user.getAge());
         userDao.setLog(getLogDaos(user.getLog()));
+
+        System.out.println("in realconvert, length of reciever message: "+user.getRecieverMessage().size() + " , length of sender message: "+user.getSenderMessage().size());
         userDao.setRecieverMessage(getMessageDaos(user.getRecieverMessage()));
         userDao.setSenderMessage(getMessageDaos(user.getSenderMessage()));
 
@@ -155,9 +157,23 @@ public class UserController {
             MessageDao dao = new MessageDao();
             dao.setId(messages.get(i).getId());
             dao.setDate(messages.get(i).getDate() !=null ? messages.get(i).getDate() : null);
+            dao.setContent(messages.get(i).getContent());
+            dao.setSender(convertMessageUser(messages.get(i).getSender()));
+            dao.setReciever(messages.get(i).getReciever().getUsername());
+            listToReturn.add(dao);
         }
         // user saknas
         return listToReturn;
+    }
+
+    private UserDao convertMessageUser(User user){
+        UserDao userDao = new UserDao();
+        userDao.setId(user.getId());
+        userDao.setUsername(user.getUsername());
+        userDao.setAddress(user.getAddress());
+        userDao.setWorkTitle(user.getWorkTitle());
+        userDao.setAge(user.getAge());
+        return userDao;
     }
 
     private List<LogDao> getLogDaos(List<Log> logs){
